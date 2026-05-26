@@ -196,13 +196,39 @@ function isMobileViewport() {
   return window.matchMedia(MOBILE_LAYOUT_QUERY).matches;
 }
 
+function syncViewportHeight() {
+  const vv = window.visualViewport;
+  const height = Math.round(vv?.height ?? window.innerHeight);
+  const offsetTop = Math.round(vv?.offsetTop ?? 0);
+  document.documentElement.style.setProperty('--kindred-vh', `${height}px`);
+  document.documentElement.style.setProperty('--kindred-vv-top', `${offsetTop}px`);
+}
+
+let viewportHeightBound = false;
+function bindViewportHeight() {
+  syncViewportHeight();
+  if (viewportHeightBound) return;
+  viewportHeightBound = true;
+  const onViewportChange = () => syncViewportHeight();
+  window.addEventListener('resize', onViewportChange, { passive: true });
+  window.visualViewport?.addEventListener('resize', onViewportChange, { passive: true });
+  window.visualViewport?.addEventListener('scroll', onViewportChange, { passive: true });
+  window.addEventListener('orientationchange', () => setTimeout(syncViewportHeight, 120), { passive: true });
+}
+
 function syncNativePhoneUI() {
   state.nativePhone = isMobileViewport();
   document.body.classList.toggle('native-phone', state.nativePhone);
+  document.documentElement.classList.toggle('native-phone-root', state.nativePhone);
   const layoutToggles = $('#layoutToggles');
   if (layoutToggles) layoutToggles.hidden = state.nativePhone;
   const settingsPhone = $('#settingsPhone')?.closest('.setting-row');
   if (settingsPhone) settingsPhone.hidden = state.nativePhone;
+  if (state.nativePhone) bindViewportHeight();
+  else {
+    document.documentElement.style.removeProperty('--kindred-vh');
+    document.documentElement.style.removeProperty('--kindred-vv-top');
+  }
 }
 
 function setLayout(layout) {

@@ -585,44 +585,57 @@ body.layout-phone .plan-mini-actions .join-btn { width: 100%; }
   body.layout-phone .app-shell { max-width: calc(100vw - 14px); }
 }
 
-/* Real phones: full-screen app, no desktop shell or device frame */
-body.native-phone {
+/* Real phones: fit visible viewport (Safari toolbar-safe), not simulator shell */
+html.native-phone-root {
+  height: 100%;
   overflow: hidden;
-  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+body.native-phone {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: var(--kindred-vh, 100svh);
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
 }
 body.native-phone .ambient { display: none; }
 body.native-phone .demo-topbar { display: none; }
 body.native-phone .demo-stage {
-  height: 100dvh;
+  height: var(--kindred-vh, 100svh) !important;
   padding: 0;
   align-items: stretch;
   overflow: hidden;
 }
-body.native-phone .app-shell {
-  width: 100%;
-  max-width: none;
-  height: 100dvh;
-  min-height: 100dvh;
-  max-height: none;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  background: var(--bg);
-  contain: none;
+body.native-phone.layout-phone .app-shell {
+  position: relative !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: var(--kindred-vh, 100svh) !important;
+  min-height: 0 !important;
+  max-height: var(--kindred-vh, 100svh) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: var(--bg) !important;
+  contain: none !important;
+  transform: translateY(var(--kindred-vv-top, 0px));
 }
 body.native-phone .app-shell::before,
-body.native-phone .phone-status { display: none; }
-body.native-phone .app-main {
-  padding-top: max(14px, env(safe-area-inset-top));
-  padding-left: max(14px, env(safe-area-inset-left));
-  padding-right: max(14px, env(safe-area-inset-right));
-  padding-bottom: calc(var(--nav-h) + max(14px, env(safe-area-inset-bottom)));
+body.native-phone .phone-status { display: none !important; }
+body.native-phone.layout-phone .app-main {
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-left: max(12px, env(safe-area-inset-left));
+  padding-right: max(12px, env(safe-area-inset-right));
+  padding-bottom: calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));
   border-radius: 0;
 }
-body.native-phone .bottom-nav {
-  left: max(10px, env(safe-area-inset-left));
-  right: max(10px, env(safe-area-inset-right));
-  bottom: max(10px, env(safe-area-inset-bottom));
+body.native-phone.layout-phone .bottom-nav {
+  left: max(8px, env(safe-area-inset-left));
+  right: max(8px, env(safe-area-inset-right));
+  bottom: max(8px, env(safe-area-inset-bottom));
 }
 body.native-phone .sheet-layer { border-radius: 0; }
 body.native-phone .sheet-backdrop { border-radius: 0; }
@@ -632,3 +645,6 @@ body.native-phone .sheet.full {
   border-radius: 0;
 }
 body.native-phone .layout-toggles { display: none; }
+body.native-phone .toast-stack {
+  bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom));
+}
