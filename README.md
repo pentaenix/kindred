@@ -7,7 +7,7 @@ This version is designed to be a single static site. There is no backend, build 
 ## Run locally
 
 ```bash
-cd kindred-static-demo-v2-fixed
+cd kindred-static-demo
 python3 -m http.server 8080
 ```
 
@@ -21,12 +21,26 @@ You can also open `index.html` directly in a browser, though a local server is r
 
 ## GitHub Pages
 
-1. Upload the contents of this folder to the root of a GitHub repo.
-2. Go to Settings → Pages.
-3. Choose the `main` branch and `/root`.
-4. Save.
+This repo ships with a GitHub Actions workflow (`.github/workflows/pages.yml`) that publishes the site on every push to `main`.
 
-The `.nojekyll` file is included so GitHub Pages serves the assets exactly as-is.
+### One-time setup
+
+1. Push this folder to a GitHub repo (for example `pentaenix/kindred`).
+2. In the repo, open **Settings → Pages**.
+3. Under **Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”).
+4. Push to `main`, or run the workflow manually from **Actions → Deploy GitHub Pages → Run workflow**.
+
+After the first successful run, the site is live at:
+
+```text
+https://<your-github-username>.github.io/<repo-name>/
+```
+
+For `pentaenix/kindred` that is `https://pentaenix.github.io/kindred/`.
+
+Paths in the app are relative (`styles.css`, `assets/...`), so no build step or base-path config is required.
+
+The `.nojekyll` file tells GitHub Pages not to run Jekyll, so assets are served exactly as uploaded.
 
 ## What changed in this fix pass
 
