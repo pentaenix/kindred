@@ -585,47 +585,40 @@ body.layout-phone .plan-mini-actions .join-btn { width: 100%; }
   body.layout-phone .app-shell { max-width: calc(100vw - 14px); }
 }
 
-/* Real phones: pin to visible viewport; nav clears Safari bottom toolbar */
-.safari-scroll-helper {
-  height: 1px;
-  width: 1px;
-  pointer-events: none;
-  opacity: 0;
-}
+/* Real phones: scroll like Google — document scroll lets Safari use transparent, hiding chrome */
 html.native-phone-root {
-  height: -webkit-fill-available;
-  overscroll-behavior: none;
+  height: auto;
+  -webkit-text-size-adjust: 100%;
 }
 body.native-phone.layout-phone {
   margin: 0;
-  min-height: calc(var(--kindred-vh, 100svh) + 2px);
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  overscroll-behavior-y: none;
+  overscroll-behavior-y: auto;
   touch-action: manipulation;
   -webkit-overflow-scrolling: touch;
 }
 body.native-phone .ambient { display: none; }
 body.native-phone .demo-topbar { display: none; }
 body.native-phone .demo-stage {
-  position: fixed !important;
-  top: var(--kindred-vv-top, 0) !important;
-  left: 0 !important;
-  right: 0 !important;
+  position: static !important;
   width: 100% !important;
-  height: var(--kindred-vh, 100svh) !important;
+  height: auto !important;
+  min-height: 100svh;
+  min-height: 100dvh;
   padding: 0 !important;
   margin: 0 !important;
-  align-items: stretch !important;
-  overflow: hidden !important;
-  z-index: 1;
+  overflow: visible !important;
+  display: block !important;
 }
 body.native-phone.layout-phone .app-shell {
   position: relative !important;
+  display: block !important;
   width: 100% !important;
   max-width: none !important;
-  height: 100% !important;
-  min-height: 0 !important;
+  height: auto !important;
+  min-height: 100svh !important;
+  min-height: 100dvh !important;
   max-height: none !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -633,21 +626,28 @@ body.native-phone.layout-phone .app-shell {
   background: var(--bg) !important;
   contain: none !important;
   transform: none !important;
-  overflow: hidden !important;
+  overflow: visible !important;
+  isolation: auto !important;
 }
 body.native-phone .app-shell::before,
 body.native-phone .phone-status { display: none !important; }
 body.native-phone.layout-phone .app-main {
-  position: absolute !important;
-  inset: 0 !important;
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
   height: auto !important;
   max-height: none !important;
+  min-height: calc(100svh - var(--nav-h) - var(--kindred-ui-bottom, 0px));
+  min-height: calc(100dvh - var(--nav-h) - var(--kindred-ui-bottom, 0px));
+  overflow: visible !important;
+  overscroll-behavior: auto !important;
+  contain: none !important;
   padding-top: max(10px, env(safe-area-inset-top));
   padding-left: max(12px, env(safe-area-inset-left));
   padding-right: max(12px, env(safe-area-inset-right));
-  padding-bottom: calc(var(--nav-h) + 20px + var(--kindred-ui-bottom, 0px) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(var(--nav-h) + 16px + var(--kindred-ui-bottom, 0px) + env(safe-area-inset-bottom, 0px));
   border-radius: 0;
-  z-index: 1;
 }
 body.native-phone.layout-phone .bottom-nav {
   position: fixed !important;
@@ -658,14 +658,17 @@ body.native-phone.layout-phone .bottom-nav {
   bottom: calc(var(--kindred-ui-bottom, 0px) + max(6px, env(safe-area-inset-bottom, 0px))) !important;
   transform: none !important;
   contain: none !important;
+  background: color-mix(in srgb, var(--bg-2) 92%, transparent) !important;
+  backdrop-filter: blur(20px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.2) !important;
 }
 body.native-phone.layout-phone .sheet-layer {
   position: fixed !important;
-  top: var(--kindred-vv-top, 0) !important;
-  left: 0 !important;
-  right: 0 !important;
+  inset: 0 !important;
+  top: 0 !important;
   width: 100% !important;
-  height: var(--kindred-vh, 100svh) !important;
+  height: 100% !important;
+  height: 100dvh !important;
   border-radius: 0 !important;
   z-index: 9999 !important;
 }
