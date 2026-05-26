@@ -200,8 +200,23 @@ function syncViewportHeight() {
   const vv = window.visualViewport;
   const height = Math.round(vv?.height ?? window.innerHeight);
   const offsetTop = Math.round(vv?.offsetTop ?? 0);
+  const layoutHeight = window.innerHeight;
+  const bottomChrome = Math.max(0, Math.round(layoutHeight - offsetTop - height));
   document.documentElement.style.setProperty('--kindred-vh', `${height}px`);
   document.documentElement.style.setProperty('--kindred-vv-top', `${offsetTop}px`);
+  document.documentElement.style.setProperty('--kindred-ui-bottom', `${bottomChrome}px`);
+}
+
+function isStandaloneApp() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function tryCollapseSafariChrome() {
+  if (!state.nativePhone || isStandaloneApp()) return;
+  requestAnimationFrame(() => {
+    window.scrollTo(0, 1);
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+  });
 }
 
 let viewportHeightBound = false;
@@ -213,7 +228,13 @@ function bindViewportHeight() {
   window.addEventListener('resize', onViewportChange, { passive: true });
   window.visualViewport?.addEventListener('resize', onViewportChange, { passive: true });
   window.visualViewport?.addEventListener('scroll', onViewportChange, { passive: true });
-  window.addEventListener('orientationchange', () => setTimeout(syncViewportHeight, 120), { passive: true });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      syncViewportHeight();
+      tryCollapseSafariChrome();
+    }, 120);
+  }, { passive: true });
+  document.addEventListener('touchstart', tryCollapseSafariChrome, { once: true, passive: true });
 }
 
 function syncNativePhoneUI() {
@@ -224,10 +245,15 @@ function syncNativePhoneUI() {
   if (layoutToggles) layoutToggles.hidden = state.nativePhone;
   const settingsPhone = $('#settingsPhone')?.closest('.setting-row');
   if (settingsPhone) settingsPhone.hidden = state.nativePhone;
-  if (state.nativePhone) bindViewportHeight();
-  else {
+  const scrollHelper = $('#safariScrollHelper');
+  if (scrollHelper) scrollHelper.hidden = !state.nativePhone || isStandaloneApp();
+  if (state.nativePhone) {
+    bindViewportHeight();
+    tryCollapseSafariChrome();
+  } else {
     document.documentElement.style.removeProperty('--kindred-vh');
     document.documentElement.style.removeProperty('--kindred-vv-top');
+    document.documentElement.style.removeProperty('--kindred-ui-bottom');
   }
 }
 
