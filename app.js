@@ -98,10 +98,13 @@ const sponsors = [
   { id: 'museum', name: 'Modern Museum', imageId: 'museum', copy: 'Micro-tour sponsors work because they create better public plans, not random banners.' }
 ];
 
+const MOBILE_LAYOUT_QUERY = '(max-width: 768px)';
+
 const state = {
   view: 'today',
   theme: 'dusk',
   layout: 'desktop',
+  nativePhone: false,
   mood: 'Low pressure',
   filter: 'All',
   search: '',
@@ -189,14 +192,34 @@ function setView(view) {
   renderNav();
   $('#appMain')?.scrollTo({ top: 0, behavior: 'smooth' });
 }
+function isMobileViewport() {
+  return window.matchMedia(MOBILE_LAYOUT_QUERY).matches;
+}
+
+function syncNativePhoneUI() {
+  state.nativePhone = isMobileViewport();
+  document.body.classList.toggle('native-phone', state.nativePhone);
+  const layoutToggles = $('#layoutToggles');
+  if (layoutToggles) layoutToggles.hidden = state.nativePhone;
+  const settingsPhone = $('#settingsPhone')?.closest('.setting-row');
+  if (settingsPhone) settingsPhone.hidden = state.nativePhone;
+}
+
 function setLayout(layout) {
+  if (state.nativePhone) layout = 'phone';
   state.layout = layout;
   document.body.classList.toggle('layout-phone', layout === 'phone');
   document.body.classList.toggle('layout-desktop', layout !== 'phone');
-  $('#phoneToggle').classList.toggle('is-active', layout === 'phone');
-  $('#desktopToggle').classList.toggle('is-active', layout !== 'phone');
-  $('#phoneToggle').setAttribute('aria-pressed', layout === 'phone');
-  $('#desktopToggle').setAttribute('aria-pressed', layout !== 'phone');
+  const phoneToggle = $('#phoneToggle');
+  const desktopToggle = $('#desktopToggle');
+  if (phoneToggle) {
+    phoneToggle.classList.toggle('is-active', layout === 'phone');
+    phoneToggle.setAttribute('aria-pressed', layout === 'phone');
+  }
+  if (desktopToggle) {
+    desktopToggle.classList.toggle('is-active', layout !== 'phone');
+    desktopToggle.setAttribute('aria-pressed', layout !== 'phone');
+  }
   closeSheet();
 }
 function setTheme(theme) {
@@ -356,7 +379,10 @@ function bindEvents() {
   $('#desktopToggle').addEventListener('click', () => setLayout('desktop'));
   $('#themeToggle').addEventListener('click', () => setTheme(state.theme === 'light' ? 'dusk' : 'light'));
   $('#settingsTheme').addEventListener('click', () => setTheme(state.theme === 'light' ? 'dusk' : 'light'));
-  $('#settingsPhone').addEventListener('click', () => setLayout(state.layout === 'phone' ? 'desktop' : 'phone'));
+  $('#settingsPhone')?.addEventListener('click', () => {
+    if (state.nativePhone) return;
+    setLayout(state.layout === 'phone' ? 'desktop' : 'phone');
+  });
   $('#resetMoodBtn').addEventListener('click', () => { state.mood = 'Low pressure'; renderToday(); });
   $('#shuffleBtn').addEventListener('click', () => { state.shuffled = !state.shuffled; renderToday(); });
   $('#searchInput').addEventListener('input', event => { state.search = event.target.value; renderExplore(); });
@@ -370,10 +396,19 @@ function bindEvents() {
   document.addEventListener('keydown', event => { if (event.key === 'Escape') closeSheet(); });
 }
 
+function initLayout() {
+  syncNativePhoneUI();
+  setLayout(isMobileViewport() ? 'phone' : 'desktop');
+  window.matchMedia(MOBILE_LAYOUT_QUERY).addEventListener('change', event => {
+    syncNativePhoneUI();
+    setLayout(event.matches ? 'phone' : 'desktop');
+  });
+}
+
 renderAll();
 bindEvents();
 setTheme('dusk');
-setLayout('desktop');
+initLayout();
 
 /* --- v2.1 polish pass: interactive save, generated plan success, safer sheets --- */
 (function applyKindredV21Polish(){

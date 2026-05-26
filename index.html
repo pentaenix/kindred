@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="theme-dusk layout-desktop">
+  <script>
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      document.body.classList.replace('layout-desktop', 'layout-phone');
+      document.body.classList.add('native-phone');
+    }
+  </script>
   <div class="ambient ambient-one" aria-hidden="true"></div>
   <div class="ambient ambient-two" aria-hidden="true"></div>
 
@@ -18,8 +24,10 @@
     </a>
 
     <div class="demo-controls" aria-label="Demo controls">
-      <button class="seg is-active" id="desktopToggle" type="button" aria-pressed="true">Desktop</button>
-      <button class="seg" id="phoneToggle" type="button" aria-pressed="false">Phone</button>
+      <span class="layout-toggles" id="layoutToggles">
+        <button class="seg is-active" id="desktopToggle" type="button" aria-pressed="true">Desktop</button>
+        <button class="seg" id="phoneToggle" type="button" aria-pressed="false">Phone</button>
+      </span>
       <button class="seg" id="themeToggle" type="button" aria-pressed="false">Warm light</button>
     </div>
   </header>
