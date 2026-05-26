@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+<title id="title">Meeple House sponsor card</title><desc id="desc">Original fake sponsor asset for the Kindred static demo.</desc>
+<defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#581c87"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+<rect width="900" height="520" rx="64" fill="url(#g)"/>
+<circle cx="760" cy="110" r="110" fill="#fff" opacity=".12"/><circle cx="112" cy="430" r="150" fill="#000" opacity=".14"/>
+<rect x="72" y="88" width="756" height="344" rx="42" fill="#fff" opacity=".12"/>
+<text x="104" y="168" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="800" fill="#fff" opacity=".75">Group night sponsor</text>
+<text x="104" y="260" font-family="Inter,Arial,sans-serif" font-size="74" font-weight="900" fill="#fff">Meeple House</text>
+<text x="104" y="336" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="600" fill="#fff" opacity=".82">Sponsored only when it matches the plan.</text>
+</svg>

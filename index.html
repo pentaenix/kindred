@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kindred — polished static demo</title>
+  <meta name="description" content="Kindred: an activity-first social discovery app mockup with phone and desktop modes." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-dusk layout-desktop">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="demo-topbar">
+    <a class="brand" href="#today" aria-label="Kindred home">
+      <span class="brand-mark">k</span>
+      <span class="brand-copy"><strong>Kindred</strong><small>Find your next good evening.</small></span>
+    </a>
+
+    <div class="demo-controls" aria-label="Demo controls">
+      <button class="seg is-active" id="desktopToggle" type="button" aria-pressed="true">Desktop</button>
+      <button class="seg" id="phoneToggle" type="button" aria-pressed="false">Phone</button>
+      <button class="seg" id="themeToggle" type="button" aria-pressed="false">Warm light</button>
+    </div>
+  </header>
+
+  <main class="demo-stage" id="demoStage">
+    <section class="app-shell" id="appShell" aria-label="Kindred app mockup">
+      <aside class="desktop-sidebar panel" aria-label="Primary navigation">
+        <button class="user-mini" data-open-profile="maya" type="button">
+          <span class="avatar-slot" data-person-avatar="maya"></span>
+          <span><strong>Maya</strong><small>Public plans · quiet curiosity</small></span>
+        </button>
+        <nav class="side-nav" id="sideNav" aria-label="Main navigation"></nav>
+        <button class="safety-note" data-open-safety type="button">
+          <span class="eyebrow">Core rule</span>
+          <strong>Public places first.</strong>
+          <small>First hangs favor staffed venues, groups, and safety check-ins.</small>
+        </button>
+      </aside>
+
+      <div class="phone-status" aria-hidden="true"><span>9:41</span><span>◐ 5G ▰</span></div>
+
+      <div class="app-main" id="appMain">
+        <section class="view is-active" data-view="today" aria-labelledby="todayTitle">
+          <header class="hero panel">
+            <div class="hero-copy">
+              <span class="eyebrow">Today</span>
+              <h1 id="todayTitle">What kind of moment are you craving?</h1>
+              <p>Pick the energy first. Kindred turns it into safe, public plans with people who fit the vibe.</p>
+              <div class="button-row">
+                <button class="btn primary" data-open-composer type="button">Build me a plan</button>
+                <button class="btn ghost" data-view-link="explore" type="button">Explore all</button>
+              </div>
+            </div>
+            <div class="fit-orb" aria-label="Compatibility preview">
+              <strong>92%</strong><span>best plan fit</span>
+              <div class="mini-avatars" id="heroAvatars"></div>
+            </div>
+          </header>
+
+          <section class="section-block">
+            <div class="section-title"><div><span class="eyebrow">Social battery</span><h2>Set the room tone</h2></div><button class="text-btn" id="resetMoodBtn" type="button">Reset</button></div>
+            <div class="chips" id="moodChips"></div>
+          </section>
+
+          <section class="section-block">
+            <div class="section-title"><div><span class="eyebrow">Daily vibe deck</span><h2>Plans worth leaving home for</h2></div><button class="text-btn" id="shuffleBtn" type="button">Shuffle</button></div>
+            <div class="cards-grid" id="todayPlans"></div>
+          </section>
+        </section>
+
+        <section class="view" data-view="explore" aria-labelledby="exploreTitle">
+          <header class="page-head">
+            <span class="eyebrow">Explore</span>
+            <h1 id="exploreTitle">Search by activity, mood, place, or comfort.</h1>
+            <p>Discovery starts with the plan, then narrows by safety, group size, energy, cost, and timing.</p>
+          </header>
+
+          <section class="search-panel panel">
+            <label class="search-box" for="searchInput"><span>⌕</span><input id="searchInput" type="search" placeholder="Try “bookstore”, “quiet”, “Saturday”, “public”, “free”…" /></label>
+            <div class="chips compact" id="filterChips"></div>
+          </section>
+
+          <div class="content-with-rail">
+            <section class="section-block no-top">
+              <div class="section-title"><h2>Matching plans</h2><span class="count-pill" id="resultCount">0</span></div>
+              <div class="result-list" id="exploreResults"></div>
+            </section>
+            <aside class="inside-rail">
+              <section class="micro-card panel"><span class="eyebrow">Discovery model</span><h3>Moments before strangers.</h3><p>Every search returns plans first, then compatible people and safe venues. One-on-one hangs have more friction than public groups.</p></section>
+              <section class="micro-card panel" id="featuredVenue"></section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" data-view="plans" aria-labelledby="plansTitle">
+          <header class="page-head action-head">
+            <div><span class="eyebrow">Plans</span><h1 id="plansTitle">From curious to confirmed.</h1><p>Saved ideas, pending groups, confirmed hangs, and the gentle “again?” loop.</p></div>
+            <button class="btn primary" data-open-composer type="button">Create plan</button>
+          </header>
+          <div class="lifecycle" id="planLifecycle"></div>
+        </section>
+
+        <section class="view" data-view="circles" aria-labelledby="circlesTitle">
+          <header class="page-head"><span class="eyebrow">Circles</span><h1 id="circlesTitle">Small recurring pods, not noisy communities.</h1><p>Tiny rituals, familiar faces, clear norms, and recurring public plans.</p></header>
+          <div class="circle-grid" id="circleGrid"></div>
+        </section>
+
+        <section class="view" data-view="you" aria-labelledby="youTitle">
+          <header class="you-hero panel">
+            <span class="avatar-slot hero-avatar" data-person-avatar="maya"></span>
+            <div><span class="eyebrow">You</span><h1 id="youTitle">Maya’s social dashboard</h1><p>Profile, passport, saved plans, preferences, safety, theme, and demo controls live here.</p><div class="tag-row"><span>Books</span><span>Small groups</span><span>Public first</span><span>Slow replies</span></div></div>
+          </header>
+          <div class="you-grid">
+            <section class="profile-card panel"><div class="section-title"><h2>Profile clarity</h2><button class="text-btn" data-open-profile="maya" type="button">Preview</button></div><div class="detail-list"><p><strong>Here for</strong><span>Friends · activity partners · small groups</span></p><p><strong>First hang</strong><span>Public places only · group preferred</span></p><p><strong>Reply style</strong><span>Thoughtful, not instant</span></p></div></section>
+            <section class="profile-card panel"><div class="section-title"><h2>Safety preferences</h2><button class="text-btn" data-open-safety type="button">Open</button></div><div class="safety-strip"><span>Venue lock</span><span>Buddy card</span><span>Own transport</span><span>No private first meets</span></div></section>
+            <section class="profile-card panel"><span class="eyebrow">May Passport</span><h2>Your month got fuller.</h2><div class="passport-stats" id="passportStats"></div></section>
+            <section class="profile-card panel"><span class="eyebrow">Demo settings</span><h2>Make the mockup behave.</h2><div class="settings-list"><button class="setting-row" id="settingsTheme" type="button"><span>Theme</span><strong>Dusk / light</strong></button><button class="setting-row" id="settingsPhone" type="button"><span>View</span><strong>Desktop / phone</strong></button><button class="setting-row" data-view-link="explore" type="button"><span>Discovery</span><strong>Search plans</strong></button></div></section>
+          </div>
+        </section>
+      </div>
+
+      <aside class="desktop-rail" aria-label="Context rail">
+        <section class="rail-card panel" id="railLive"></section>
+        <section class="rail-card panel" id="railPartner"></section>
+        <section class="rail-card panel" id="railSafety"></section>
+      </aside>
+
+      <nav class="bottom-nav" id="bottomNav" aria-label="Mobile navigation"></nav>
+      <div class="sheet-layer" id="sheetLayer" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="assets/custom-images.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
